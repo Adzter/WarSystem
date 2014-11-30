@@ -3,7 +3,7 @@ util.AddNetworkString( "startRequestWar" )
 
 net.Receive( "startRequestWar", function( len, ply )
 	-- First lets check if they're actually the leader of the gang
-	if table.HasValue( warConfig.teamLeaders, team.GetName( ply:Team() ) )
+	if table.HasValue( warConfig.teamLeaders, team.GetName( ply:Team() ) ) then
 		
 		-- Send a request to all the other team leaders to start a war
 		for k,v in pairs( warConfig.teamLeaders ) do
@@ -17,7 +17,7 @@ net.Receive( "startRequestWar", function( len, ply )
 	end
 end)
 
-local function broadcastRequestWar( leader )
+function broadcastRequestWar( leader )
 	-- Send the accept/decline message to the leader of the opposing faction
 	net.Start( "broadcastRequestWar" )
 	net.Send( leader )
