@@ -8,12 +8,15 @@
                                                                         
 	Created by Adzter: http://steamcommunity.com/id/imadzter
 	For NPIGamers: http://npigamers.com/
+	
+	NOTE: I haven't tested this with more than 2 teams as
+	it was only ever intended for 2 teams. In theory it 
+	might work but there's probably	some hideous bugs
 --]]
 
-local warConfig = {}                 -- Don't touch this
-warConfig.team1 = { }                -- First team name
-warConfig.team1Leader = {}           -- Leader for the first team
-warConfig.team2 = { }                -- Second team name
-warConfig.team2Leader = {}           -- Leader for the second team
-warConfig.length = 900               -- Length the war should last for
-warConfig.endWhenLeaderKilled = true -- When the leader is killed, should the war be over?
+local warConfig = {}                            -- Don't touch this
+warConfig.teams = { TEAM_GANGSTER, TEAM_MAFIA } -- First and second team name
+warConfig.teamLeaders = { TEAM_MOB, TEAM_DON }  -- Leader for the first and second team
+warConfig.length = 900                          -- Length the war should last for
+warConfig.endWhenLeaderKilled = true            -- When the leader is killed, should the war be over?
+
