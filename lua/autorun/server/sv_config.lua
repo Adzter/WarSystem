@@ -14,8 +14,8 @@
 	might work but there's probably	some hideous bugs
 --]]
 
-warConfig = {}                                  -- Don't touch this
-warConfig.teams = { "Gangster", "Mafia" } -- First and second team name
+warConfig = {}                                     -- Don't touch this
+warConfig.teams = { "Gangster", "Mafia" }          -- First and second team name
 warConfig.teamLeaders = { "Mob Boss", "The Don" }  -- Leader for the first and second team
-warConfig.length = 900                          -- Length the war should last for
-warConfig.endWhenLeaderKilled = true            -- When the leader is killed, should the war be over?
+warConfig.length = 900                             -- Length the war should last for
+warConfig.endWhenLeaderKilled = true               -- When the leader is killed, should the war be over?

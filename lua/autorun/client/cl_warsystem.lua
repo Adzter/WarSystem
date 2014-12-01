@@ -46,17 +46,27 @@ function showMenu()
 	
 	local acceptButton = vgui.Create( "DButton", DFrame )
 	acceptButton:SetPos( 60, 220 )
-	acceptButton:SetText( "Accept" )
+	acceptButton:SetText( "" )
 	acceptButton:SetSize( 180, 60 )
 	acceptButton.DoClick = function()
 		DFrame:Remove()
 	end
 	
+	function acceptButton:Paint( w, h )
+		draw.RoundedBox( 0, 0, 0, w, h, Color( 39, 174, 96) )
+		draw.SimpleText( "Accept", "warDesc", w/2, 20, Color(50,50,50), TEXT_ALIGN_CENTER, 0 )
+	end
+	
 	local declineButton = vgui.Create( "DButton", DFrame )
 	declineButton:SetPos( 260, 220 )
-	declineButton:SetText( "Decline" )
+	declineButton:SetText( "" )
 	declineButton:SetSize( 180, 60 )
 	declineButton.DoClick = function()
 		DFrame:Remove()
+	end
+	
+	function declineButton:Paint( w, h )
+		draw.RoundedBox( 0, 0, 0, w, h, Color( 39, 174, 96) )
+		draw.SimpleText( "Decline", "warDesc", w/2, 20, Color(50,50,50), TEXT_ALIGN_CENTER, 0 )
 	end
 end
