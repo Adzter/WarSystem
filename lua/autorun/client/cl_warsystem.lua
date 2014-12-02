@@ -16,14 +16,6 @@ surface.CreateFont( "warDesc", {
 	antialias = true, 
 } )
 
--- Add a chat command to request a war
-hook.Add( "OnPlayerChat", "war", function( ply, text, team )
-	if ( string.sub( text, 1, 4 ) == "!war" ) then
-		net.Start( "startRequestWar" )
-		net.SendToServer()
-	end
-end )
-
 -- Accept/Decline functions
 function acceptRequest()
 	net.Start("acceptWar")
