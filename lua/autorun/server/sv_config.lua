@@ -19,4 +19,5 @@ warConfig.teams = { "Gangster", "Mafia" }          -- First and second team name
 warConfig.teamLeaders = { "Mob boss", "The Don" }  -- Leader for the first and second team
 warConfig.length = 900                             -- Length the war should last for
 warConfig.endWhenLeaderKilled = true               -- When the leader is killed, should the war be over?
-warConfig.requestDelay = 300                              -- Delay between requesting wars
+warConfig.requestDelay = 300                       -- Delay between requesting wars
+warConfig.timeout = 30                             -- How long you have to accept/decline the war

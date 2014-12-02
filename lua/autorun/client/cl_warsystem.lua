@@ -1,4 +1,4 @@
---Setup the bfont
+--Setup the fonts
 surface.CreateFont( "warName", {
 	font = "Bebas Neue", 
 	size = 55, 
@@ -24,11 +24,24 @@ hook.Add( "OnPlayerChat", "war", function( ply, text, team )
 	end
 end )
 
+-- Accept/Decline functions
+function acceptRequest()
+	net.Start("acceptWar")
+	net.SendToServer()
+end
+
+function declineRequest()
+	net.Start("declineWar")
+	net.SendToServer()
+end
+
+
 -- Opens the accept/decline message once requested by the server
 net.Receive( "broadcastRequestWar", function()
 	showMenu()
 end)
 
+-- Menu design and functionality
 function showMenu() 
 	DFrame = vgui.Create( "DFrame" )
 	DFrame:SetSize( 500, 300 )
@@ -49,6 +62,7 @@ function showMenu()
 	acceptButton:SetText( "" )
 	acceptButton:SetSize( 180, 60 )
 	acceptButton.DoClick = function()
+		acceptRequest()
 		DFrame:Remove()
 	end
 	
@@ -62,6 +76,7 @@ function showMenu()
 	declineButton:SetText( "" )
 	declineButton:SetSize( 180, 60 )
 	declineButton.DoClick = function()
+		declineRequest()
 		DFrame:Remove()
 	end
 	
