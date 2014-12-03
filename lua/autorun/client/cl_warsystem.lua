@@ -30,11 +30,12 @@ end
 
 -- Opens the accept/decline message once requested by the server
 net.Receive( "broadcastRequestWar", function()
-	showMenu()
+	local requester = net.ReadEntity()
+	showMenu( requester )
 end)
 
 -- Menu design and functionality
-function showMenu() 
+function showMenu( requester ) 
 	DFrame = vgui.Create( "DFrame" )
 	DFrame:SetSize( 500, 300 )
 	DFrame:Center()
@@ -45,7 +46,7 @@ function showMenu()
 		draw.RoundedBox( 0, 0, 0, w, h, Color( 240, 240, 240 ) )
 		draw.RoundedBox( 0, 0, 0, w, 25, Color( 39, 174, 96) )
 		draw.SimpleText( "War System", "Trebuchet18", w/2, 3, Color(255,255,255), TEXT_ALIGN_CENTER, 0 )
-		draw.SimpleText( "TECHNOBABBLEADZ", "warName", w/2, 75, Color(50,50,50), TEXT_ALIGN_CENTER, 0 )
+		draw.SimpleText( requester:Nick(), "warName", w/2, 75, Color(50,50,50), TEXT_ALIGN_CENTER, 0 )
 		draw.SimpleText( "has challenged you to a war", "warDesc", w/2, 150, Color(50,50,50), TEXT_ALIGN_CENTER, 0 )
 	end
 	

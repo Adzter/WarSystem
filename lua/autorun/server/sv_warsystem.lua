@@ -28,7 +28,6 @@ function startRequestWar( ply )
 		-- Cache this so we can refer back to it later
 		cachedRequestingTeam = requestingTeam
 		if table.HasValue( warConfig.teamLeaders, requestingTeam ) then
-			print( "Requesting Team: " .. requestingTeam )
 			-- Send a request to all the other team leaders to start a war
 			for k,v in pairs( team.GetAllTeams() ) do
 			
@@ -38,15 +37,15 @@ function startRequestWar( ply )
 				if table.HasValue( warConfig.teamLeaders, v["Name"] ) and v["Name"] != requestingTeam then
 					-- Send the broadcast request to all players
 					for k,v in pairs( team.GetPlayers( k ) ) do
+					
 						lastRequest = CurTime() + warConfig.requestDelay
-						broadcastRequestWar( v )
-						
+						broadcastRequestWar( v, ply )
 						waitingForResponse = true
-						
 						DarkRP.notify( ply, 0, 3, "War request sent!" )
 						
 						-- Time out the request after 30 seconds
 						timer.Simple( warConfig.timeout, function() warTimeout() end)
+						
 					end
 				end
 
@@ -59,13 +58,13 @@ function startRequestWar( ply )
 end
 
 -- Send the accept/decline message to the leader of the opposing faction
-function broadcastRequestWar( leader )
+function broadcastRequestWar( leader, requester )
 	net.Start( "broadcastRequestWar" )
+		net.WriteEntity( requester )
 	net.Send( leader )
 end
 
 function warTimeout()
-	print( waitingForResponse )
 	if not isAtWar and waitingForResponse then
 	
 		-- If we're not at war then let the teams know that the war was declined
