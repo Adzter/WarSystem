@@ -73,6 +73,10 @@ function warTimeout()
 				for k,v in pairs( team.GetPlayers( k ) ) do
 					waitingForResponse = false
 					DarkRP.notify( v, 0, 3, "War declined!" )
+					
+					for k,v in pairs( player.GetAll() ) do
+						v:SendLua( "if DFrame then DFrame:Remove() end" );
+					end
 				end
 			end
 		end
