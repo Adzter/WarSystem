@@ -26,7 +26,7 @@ function startRequestWar( ply )
 		requestingTeam = team.GetName( ply:Team() )
 		
 		-- Cache this so we can refer back to it later
-		cachedRequestingTeam = requestingTeam
+		cachedRequestingTeam = ply
 		if table.HasValue( warConfig.teamLeaders, requestingTeam ) then
 			-- Send a request to all the other team leaders to start a war
 			for k,v in pairs( team.GetAllTeams() ) do
@@ -94,9 +94,11 @@ net.Receive( "acceptWar", function( len, ply )
 			
 			-- We don't want the person who sent the request to accept it
 			if cachedRequestingTeam == nil then return end
-			if acceptingTeam == cachedRequestingTeam then return end	
+			if acceptingTeam == team.GetName(cachedRequestingTeam:Team()) then return end	
 			
 			waitingForResponse = false
+			
+			warAccepted( ply, cachedRequestingTeam )
 			-- Add code here to start the war
 		end
 	end
@@ -112,7 +114,7 @@ net.Receive( "declineWar", function( len, ply )
 			
 			-- We don't want the person who sent the request to accept it
 			if cachedRequestingTeam == nil then return end
-			if acceptingTeam == cachedRequestingTeam then return end	
+			if acceptingTeam == team.GetName(cachedRequestingTeam:Team()) then return end	
 			
 			for k,v in pairs( team.GetAllTeams() ) do
 				if table.HasValue( warConfig.teamLeaders, v["Name"] ) or table.HasValue( warConfig.teams, v["Name"] ) then

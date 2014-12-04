@@ -15,6 +15,14 @@ surface.CreateFont( "warDesc", {
 	scanlines = 0, 
 	antialias = true, 
 } )
+surface.CreateFont( "warHUD", {
+	font = "Bebas Neue",
+	size = 40,
+	weight= 500,
+	blursize = 0, 
+	scanlines = 0, 
+	antialias = true, 
+} )
 
 -- Accept/Decline functions
 function acceptRequest()
@@ -78,3 +86,10 @@ function showMenu( requester )
 		draw.SimpleText( "Decline", "warDesc", w/2, 20, Color(50,50,50), TEXT_ALIGN_CENTER, 0 )
 	end
 end
+
+-- Draw on the HUD when there's a war
+hook.Add( "HUDPaint", "warSystem", function()
+	draw.SimpleTextOutlined( "Mob Boss vs. The Don", "warHUD", ScrW()/2, ScrH() - 60, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 2, Color( 0, 0, 0, 255 ) )
+	draw.SimpleTextOutlined( "War Timer: 5:24", "warHUD", ScrW()/2, ScrH() - 30, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 2, Color( 0, 0, 0, 255 ) )
+end)
+
