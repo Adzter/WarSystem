@@ -100,9 +100,6 @@ net.Receive( "acceptWar", function( len, ply )
 			
 			waitingForResponse = false
 			
-			--warAccepted( ply, cachedRequestingTeam )
-			-- Add code here to start the war
-			
 			net.Start( "startWarTimer" )
 				net.WriteEntity( ply )
 				net.WriteEntity( cachedRequestingTeam )
