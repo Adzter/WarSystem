@@ -89,7 +89,31 @@ end
 
 -- Draw on the HUD when there's a war
 hook.Add( "HUDPaint", "warSystem", function()
-	draw.SimpleTextOutlined( "Mob Boss vs. The Don", "warHUD", ScrW()/2, ScrH() - 60, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 2, Color( 0, 0, 0, 255 ) )
-	draw.SimpleTextOutlined( "War Timer: 5:24", "warHUD", ScrW()/2, ScrH() - 30, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 2, Color( 0, 0, 0, 255 ) )
+	if isAtWar then
+		draw.SimpleTextOutlined( team1:Nick() .. " vs. " .. team2:Nick() , "warHUD", ScrW()/2, ScrH() - 60, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 2, Color( 0, 0, 0, 255 ) )
+		draw.SimpleTextOutlined( "War Timer: " .. string.FormattedTime( currentTime, "%02i:%02i" ), "warHUD", ScrW()/2, ScrH() - 30, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 2, Color( 0, 0, 0, 255 ) )
+	end
+end)
+
+currentTime = nil
+-- Handle the timer side of the war
+net.Receive( "startWarTimer", function()
+	team1 = net.ReadEntity()
+	team2 = net.ReadEntity()
+	
+	isAtWar = true -- Set it so the war is enabled
+	currentTime = warConfig.length -- Set the length of the war
+	
+	timer.Create( "warTimer", 1, 0, function()
+		-- Visually create a timer
+		if currentTime  > 0 and isAtWar then
+			currentTime = currentTime - 1
+		else
+			isAtWar = false
+			
+			-- Not sure if the timer will destroy itself, but lets destroy it just incase
+			timer.Destroy( "warTimer" )
+		end
+	end)
 end)
 

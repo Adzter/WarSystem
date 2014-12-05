@@ -2,6 +2,7 @@
 util.AddNetworkString( "startRequestWar" )
 util.AddNetworkString( "broadcastRequestWar" )
 util.AddNetworkString( "acceptWar" )
+util.AddNetworkString( "startWarTimer" )
 util.AddNetworkString( "declineWar" )
 
 -- Store the current time
@@ -74,6 +75,7 @@ function warTimeout()
 					waitingForResponse = false
 					DarkRP.notify( v, 0, 3, "War declined!" )
 					
+					-- If they've got the menu open then close it
 					for k,v in pairs( player.GetAll() ) do
 						v:SendLua( "if DFrame then DFrame:Remove() end" );
 					end
@@ -98,8 +100,31 @@ net.Receive( "acceptWar", function( len, ply )
 			
 			waitingForResponse = false
 			
-			warAccepted( ply, cachedRequestingTeam )
+			--warAccepted( ply, cachedRequestingTeam )
 			-- Add code here to start the war
+			
+			net.Start( "startWarTimer" )
+				net.WriteEntity( ply )
+				net.WriteEntity( cachedRequestingTeam )
+			net.Broadcast()
+			
+			isAtWar = true -- Set it so the war is enabled
+			currentTime = warConfig.length -- Set the length of the war
+			
+			timer.Create( "warTimer", 1, 0, function()
+				-- Visually create a timer
+				if currentTime  > 0 and isAtWar then
+					currentTime = currentTime - 1
+				else
+					isAtWar = false
+					
+					-- Let people know what the war is over
+					DarkRP.notifyAll( 0, 3, "War over!" )
+					
+					-- Not sure if the timer will destroy itself, but lets destroy it just incase
+					timer.Destroy( "warTimer" )
+				end
+			end)
 		end
 	end
 end)
