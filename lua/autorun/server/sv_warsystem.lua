@@ -9,8 +9,9 @@ util.AddNetworkString( "declineWar" )
 local lastRequest = CurTime()
 local cachedRequestingTeam = nil
 local watingForResponse = false
+local winningTeam = nil
 
-
+-- Chat command to request the start of the war
 hook.Add( "PlayerSay", "detectCommand", function( ply, text, team )
 	if ( string.sub( text, 1, 4 ) == "!war" ) then
 		startRequestWar( ply )
@@ -150,3 +151,16 @@ net.Receive( "declineWar", function( len, ply )
 		end
 	end
 end)
+
+-- Check to see if either leaders is killing when the war is active
+function deathCheckWar( victim, inflictor, attacker )
+	if table.HasValue( warConfig.teamLeaders, team.GetName( victim:Team() ) ) then
+		isAtWar = false
+		DarkRP.notifyAll( 0, 5, team.GetName( victim:Team() ) .. " has lost the war!"  )
+	end
+end
+
+-- Enable end when either leader is killed if enabled in the config
+if warConfig.endWhenLeaderKilled then
+	hook.Add( "PlayerDeath", "deathCheckWar", deathCheckWar )
+end
