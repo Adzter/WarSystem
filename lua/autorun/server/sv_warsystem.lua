@@ -20,42 +20,46 @@ end )
 
 -- Broadcasts the request to start a war
 function startRequestWar( ply )
-	-- Make sure they can't spam by adding a cooldown
-	if lastRequest < CurTime() then
-	
-		-- First lets check if they're actually the leader of the gang
-		-- Also going to add requestingTeam as a variable to keep code cleaner
-		requestingTeam = team.GetName( ply:Team() )
+	if not isAtWar then
+		-- Make sure they can't spam by adding a cooldown
+		if lastRequest < CurTime() then
 		
-		-- Cache this so we can refer back to it later
-		cachedRequestingTeam = ply
-		if table.HasValue( warConfig.teamLeaders, requestingTeam ) then
-			-- Send a request to all the other team leaders to start a war
-			for k,v in pairs( team.GetAllTeams() ) do
+			-- First lets check if they're actually the leader of the gang
+			-- Also going to add requestingTeam as a variable to keep code cleaner
+			requestingTeam = team.GetName( ply:Team() )
 			
-				-- Check all the teams to see if they exist in the team leaders table.
-				-- A further check ensures that they aren't the requesting team
-				-- since you don't request a war with yourself.
-				if table.HasValue( warConfig.teamLeaders, v["Name"] ) and v["Name"] != requestingTeam then
-					-- Send the broadcast request to all players
-					for k,v in pairs( team.GetPlayers( k ) ) do
-					
-						lastRequest = CurTime() + warConfig.requestDelay
-						broadcastRequestWar( v, ply )
-						waitingForResponse = true
-						DarkRP.notify( ply, 0, 3, "War request sent!" )
+			-- Cache this so we can refer back to it later
+			cachedRequestingTeam = ply
+			if table.HasValue( warConfig.teamLeaders, requestingTeam ) then
+				-- Send a request to all the other team leaders to start a war
+				for k,v in pairs( team.GetAllTeams() ) do
+				
+					-- Check all the teams to see if they exist in the team leaders table.
+					-- A further check ensures that they aren't the requesting team
+					-- since you don't request a war with yourself.
+					if table.HasValue( warConfig.teamLeaders, v["Name"] ) and v["Name"] != requestingTeam then
+						-- Send the broadcast request to all players
+						for k,v in pairs( team.GetPlayers( k ) ) do
 						
-						-- Time out the request after 30 seconds
-						timer.Simple( warConfig.timeout, function() warTimeout() end)
-						
+							lastRequest = CurTime() + warConfig.requestDelay
+							broadcastRequestWar( v, ply )
+							waitingForResponse = true
+							DarkRP.notify( ply, 0, 3, "War request sent!" )
+							
+							-- Time out the request after 30 seconds
+							timer.Simple( warConfig.timeout, function() warTimeout() end)
+							
+						end
 					end
+
 				end
 
 			end
-
+		else
+			DarkRP.notify( ply, 1, 5, "Cannot request for another: " .. math.floor( lastRequest - CurTime() ) .. " seconds" )
 		end
 	else
-		DarkRP.notify( ply, 1, 5, "Cannot request for another: " .. math.floor( lastRequest - CurTime() ) .. " seconds" )
+		DarkRP.notify( ply, 1, 5, "Cannot request war during a war" )
 	end
 end
 
@@ -116,8 +120,12 @@ net.Receive( "acceptWar", function( len, ply )
 				else
 					isAtWar = false
 					
+					-- Set the cooldown between the wars
+					lastRequest = curTime() + warConfig.cooldownBetweenWars
+					
 					-- Let people know what the war is over
-					DarkRP.notifyAll( 0, 3, "War over!" )
+					DarkRP.notifyAll( 0, 3, "No-one won the war" )
+					DarkRP.notifyAll( 0, 3, "War over" )
 					
 					-- Not sure if the timer will destroy itself, but lets destroy it just incase
 					timer.Destroy( "warTimer" )
@@ -155,6 +163,10 @@ end)
 -- Check to see if either leaders is killing when the war is active
 function deathCheckWar( victim, inflictor, attacker )
 	if table.HasValue( warConfig.teamLeaders, team.GetName( victim:Team() ) ) then
+	
+		-- Set the cooldown between the wars
+		lastRequest = CurTime() + warConfig.cooldownBetweenWars
+	
 		isAtWar = false
 		DarkRP.notifyAll( 0, 5, team.GetName( victim:Team() ) .. " has lost the war!"  )
 		
