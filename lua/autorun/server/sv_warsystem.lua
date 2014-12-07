@@ -157,6 +157,10 @@ function deathCheckWar( victim, inflictor, attacker )
 	if table.HasValue( warConfig.teamLeaders, team.GetName( victim:Team() ) ) then
 		isAtWar = false
 		DarkRP.notifyAll( 0, 5, team.GetName( victim:Team() ) .. " has lost the war!"  )
+		
+		for k,v in pairs( player.GetAll() ) do
+			v:SendLua("endWar()")
+		end
 	end
 end
 

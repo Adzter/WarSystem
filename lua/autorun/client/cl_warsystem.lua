@@ -117,3 +117,8 @@ net.Receive( "startWarTimer", function()
 	end)
 end)
 
+-- If the war ends by a leader getting killed lets handle the end of the war manually
+function endWar()
+	isAtWar = false
+	timer.Destroy( "warTimer" )
+end
