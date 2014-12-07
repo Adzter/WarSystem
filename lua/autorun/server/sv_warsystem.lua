@@ -162,16 +162,18 @@ end)
 
 -- Check to see if either leaders is killing when the war is active
 function deathCheckWar( victim, inflictor, attacker )
-	if table.HasValue( warConfig.teamLeaders, team.GetName( victim:Team() ) ) then
-	
-		-- Set the cooldown between the wars
-		lastRequest = CurTime() + warConfig.cooldownBetweenWars
-	
-		isAtWar = false
-		DarkRP.notifyAll( 0, 5, team.GetName( victim:Team() ) .. " has lost the war!"  )
+	if isAtWar then
+		if table.HasValue( warConfig.teamLeaders, team.GetName( victim:Team() ) ) then
 		
-		for k,v in pairs( player.GetAll() ) do
-			v:SendLua("endWar()")
+			-- Set the cooldown between the wars
+			lastRequest = CurTime() + warConfig.cooldownBetweenWars
+		
+			isAtWar = false
+			DarkRP.notifyAll( 0, 5, team.GetName( victim:Team() ) .. " has lost the war!"  )
+			
+			for k,v in pairs( player.GetAll() ) do
+				v:SendLua("endWar()")
+			end
 		end
 	end
 end
