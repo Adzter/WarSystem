@@ -121,7 +121,7 @@ net.Receive( "acceptWar", function( len, ply )
 					isAtWar = false
 					
 					-- Set the cooldown between the wars
-					lastRequest = curTime() + warConfig.cooldownBetweenWars
+					lastRequest = CurTime() + warConfig.cooldownBetweenWars
 					
 					-- Let people know what the war is over
 					DarkRP.notifyAll( 0, 3, "No-one won the war" )
