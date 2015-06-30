@@ -124,7 +124,6 @@ net.Receive( "acceptWar", function( len, ply )
 					lastRequest = CurTime() + warConfig.cooldownBetweenWars
 					
 					-- Let people know what the war is over
-					DarkRP.notifyAll( 0, 3, "No-one won the war" )
 					DarkRP.notifyAll( 0, 3, "War over" )
 					
 					-- Not sure if the timer will destroy itself, but lets destroy it just incase
